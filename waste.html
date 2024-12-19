@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	  <meta charset="utf-8">
+	  <!-- Responsive Meta Tag -->
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	  <!-- Google Fonts -->
+	  <link rel="preconnect" href="https://fonts.googleapis.com">
+	  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+	  <!-- Bootstrap CSS Link -->
+	  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+	  <!-- External CSS Link -->
+	  <link rel="stylesheet" type="text/css" href="./main.css">
+
+	  <title>Barangay Pusok Data Bank</title>
+</head>
+<body>
+
+	<!-- Navbar Section -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-success text-light sticky-top">
+	  <div class="container-fluid">
+	    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	      <div class="navbar-nav mx-auto text-light justify-content-center">
+	        <a class="nav-link active my-2" href="./main.html#landing">Home</a>
+	        <li class="nav-item dropdown">
+	                  <a class="nav-link active my-2 dropdown-toggle" href="./main.html#management" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	                    Management
+	                  </a>
+	                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+	                  	<li><a class="dropdown-item" href="./main.html#management">Management Section</a></li>
+	                    <li><a class="dropdown-item" href="./waste.html">Waste Management</a></li>
+	                    <li><a class="dropdown-item" href="./event.html">Event Management</a></li>
+	                    <li><a class="dropdown-item" href="./incident.html">Incident Report</a></li>
+	                    <li><a class="dropdown-item" href="./progress.html">Project Progress</a></li>
+	                  </ul>
+	                </li>
+	        <a class="nav-link active" href="main.html">
+	          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfv6Zmx0JB2arznnjqx6BzVG1UvOmJHoZzuA&s" class="mt-5 mt-md-0 rounded-circle" width="50">
+	        </a>
+	        <a class="nav-link active my-2" href="./main.html#org">Org Chart</a>
+	        <a class="nav-link active my-2" href="./main.html#schedule">Schedule</a>
+	      </div>
+	    </div>
+	  </div>
+	</nav>
+
+	 <!-- Waste Management Section Start -->
+	 <main class="container-fluid">
+	          <section class="row p-3 p-md-5 bg-dark text-light" id="waste">
+	           <h1 class="mt-3 mb-5 text-center">Waste Management</h1>
+	            <div class="mx-auto col-xl-5 text-center"> 
+		              <div id="map" class="row col-md-16 mt-md-3 mx-auto">
+						<img src="file:///C:/Users/Enrico/Documents/HTML/dashboard_system/pusok.png" class="d-block w-500 pb-4">
+						<h5><strong>Days:</strong> Monday and Thursday 6:00 AM - 8:00 AM</h5>
+						<h5 class="mb-4"><strong>Pickup Location:</strong> Main Street, Zone 3</h5>
+					  </div>
+	            </div>
+
+	          <!-- Waste Management - Input Garbage Details -->
+	          <section class="col-md-6 mt-4 mx-auto">
+	              <h2>Input Garbage Details</h2>
+	              <form id="wasteForm" class="p-3 rounded form-group text-dark bg-light">
+	                <label for="garbageType" class="form-label">Type of Garbage:</label>
+	                <input type="text" class="form-control" id="garbageType" required>
+	                
+	                <label for="amount" class="form-label mt-2">Amount (in kg):</label>
+	                <input type="number" class="form-control" id="amount" required>
+	                
+	                <button type="button" id="addGarbage" class="btn btn-success mt-3 d-block mx-auto">Add Garbage</button>
+	              </form>
+	            </section>
+	          <section id="wasteResult" class="mt-4 text-center">
+	              <h2>Results</h2>
+	              <table class="table table-bordered table-striped text-center text-light">
+	                <thead class="table-success">
+	                  <tr>
+	                    <th>#</th>
+	                    <th>Garbage Type</th>
+	                    <th>Amount (kg)</th>
+	                    <th>Action</th>
+	                  </tr>
+	                </thead>
+	                <tbody id="resultTableBody" class="table-light">
+	                  <!-- Rows will be dynamically added here -->
+	                </tbody>
+	              </table>
+	            </section>
+	          </section>
+	        <!-- Waste Management Section End -->
+
+	        <!-- Pie Chart Section -->
+	        <section class="mt-5 pb-5" style="max-width: 500px; margin: auto;">
+	                <h2 class="mt-5 text-center text-dark">Garbage Data Distribution</h2>
+	                <canvas id="garbageChart" width="300" height="300"></canvas>
+	        </section>
+	    </main>
+
+	        <!-- Footer Section -->
+	        <footer class="footer bg-success text-light text-center mt-5 p-2">
+	          <p class="mt-3 mb-0">Barangay Pusok</p>
+	          <p>© Copyright 2024</p>
+	        </footer>
+
+	<!-- JS File -->
+	<script src="waste.js"></script>
+
+	<!-- Chart.js Link -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<!-- Bootstrap JS Link -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

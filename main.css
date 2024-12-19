@@ -1,0 +1,53 @@
+/*Reset*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Montserrat;
+}
+
+
+html {
+	scroll-behavior: smooth;
+}
+
+.navbar {
+	font-family: Montserrat;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 24px;
+	color: white;
+}
+
+#landing {
+	background: linear-gradient(
+		rgba(0, 34, 65, 0.61),
+		rgba(0, 34, 65, 0.61)
+	), url("./images/banner.jpg");
+	background-repeat: repeat-x;
+	background-size: cover;
+	font-family: Montserrat;
+	font-weight: 500;
+}
+
+#landing p {
+	text-align: justify;
+	line-height: 24px;
+}
+
+.card {
+	box-shadow: 0px 4px 23px 0px #00000040;
+
+}
+
+#projects p {
+	text-align: justify;
+}
+
+#contact a {
+	text-decoration: none;
+}
+
+#under-contact {
+	display: inline;
+}
