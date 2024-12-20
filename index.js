@@ -25,7 +25,7 @@ function addRow(scheduleBody, schedule, index) {
     deleteRow(scheduleBody, index);
   });
 }
-
+ 
 function deleteRow(scheduleBody, index) {
   const schedules = JSON.parse(localStorage.getItem('schedules')) || [];
   schedules.splice(index, 1);

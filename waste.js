@@ -132,7 +132,7 @@ function updateChart() {
         plugins: [ChartDataLabels],
     });
 }
-
+ 
 // Initialize
 renderTable();
 updateChart();

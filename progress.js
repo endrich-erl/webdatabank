@@ -10,7 +10,7 @@
             data.forEach((item, index) => addRowToTable(item, index + 1));
             toggleEmptyText(data.length === 0);
         };
-
+ 
         // Save data to localStorage
         const saveData = (data) => {
             localStorage.setItem('progressData', JSON.stringify(data));

@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
             checkEventsToday(); // Recheck the "Scheduled for Today" after deletion
         }
     });
-
+ 
     participantsTable.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-participant')) {
             const index = e.target.getAttribute('data-index');

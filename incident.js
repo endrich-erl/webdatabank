@@ -60,7 +60,7 @@ const addIncidentToTable = (incident, index) => {
     `;
     incidentTbody.appendChild(row);
 };
-
+ 
 // Delete incident
 const deleteIncident = (index) => {
     const incidents = JSON.parse(localStorage.getItem('incidents')) || [];
