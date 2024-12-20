@@ -4,22 +4,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const eventListTable = document.getElementById('eventList').querySelector('tbody');
     const participantsTable = document.getElementById('participantsTable').querySelector('tbody');
     const selectEvent = document.getElementById('selectEvent');
-    const barChartCtx = document.getElementById('barChart').getContext('2d');  // Bar Chart for Age Distribution
-    const ageBarChartCtx = document.getElementById('ageBarChart').getContext('2d'); // Bar Chart for Number of Participants by Event
-    const genderPieChartCtx = document.getElementById('genderPieChart').getContext('2d');  // Pie Chart for Gender Distribution
+    const barChartCtx = document.getElementById('barChart').getContext('2d');
+    const ageBarChartCtx = document.getElementById('ageBarChart').getContext('2d');
+    const genderPieChartCtx = document.getElementById('genderPieChart').getContext('2d');
+    const notificationBox = document.getElementById('notificationBox');
+    const notificationMessage = document.getElementById('notificationMessage');
 
-    // Local Storage Keys
     const EVENTS_KEY = 'events';
     const PARTICIPANTS_KEY = 'participants';
 
-    // Fetch data from local storage
     const getData = (key) => JSON.parse(localStorage.getItem(key)) || [];
     const setData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
     let events = getData(EVENTS_KEY);
     let participants = getData(PARTICIPANTS_KEY);
 
-    // Global variables to store chart instances
     let eventChart = null;
     let ageChart = null;
     let genderChart = null;
@@ -68,12 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const updateCharts = () => {
-        // Destroy existing charts if they exist
         if (eventChart) eventChart.destroy();
         if (ageChart) ageChart.destroy();
         if (genderChart) genderChart.destroy();
 
-        // 1. Age Distribution (Bar Chart for Age Groups)
         const ageGroups = ['0-18', '19-35', '36-50', '51+'];
         const ageData = ageGroups.map((_, index) => {
             return participants.filter(participant => {
@@ -107,23 +104,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // 2. Participants by Event (Bar Chart)
         const eventCounts = events.map(event => {
             return {
                 name: event.name,
                 count: participants.filter(participant => participant.event === event.name).length,
-                date: event.date // Include event date
+                date: event.date
             };
         });
 
-        // Combine event name and date into a multi-line label
-        const eventNamesWithDates = eventCounts.map(e => `${e.name}\n(${e.date})`); // Name and date on separate lines
+        const eventNamesWithDates = eventCounts.map(e => `${e.name}\n(${e.date})`);
         const eventCountsData = eventCounts.map(e => e.count);
 
         eventChart = new Chart(barChartCtx, {
             type: 'bar',
             data: {
-                labels: eventNamesWithDates, // Use combined event name and date as labels
+                labels: eventNamesWithDates,
                 datasets: [{
                     label: 'Number of Participants by Event',
                     data: eventCountsData,
@@ -140,8 +135,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 scales: {
                     x: {
                         ticks: {
-                            autoSkip: false, // Ensure labels don't get skipped, but adjust if necessary for clarity
-                            maxRotation: 0, // Rotate labels to prevent overlap
+                            autoSkip: false,
+                            maxRotation: 0,
                             minRotation: 0
                         }
                     }
@@ -149,30 +144,64 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // 3. Gender Distribution (Pie Chart)
-        const genderCounts = ['Male', 'Female', 'Other'].map(gender => {
+        // Remove "Other" category from gender counts
+        const genderCounts = ['Male', 'Female'].map(gender => {
             return participants.filter(participant => participant.gender === gender).length;
         });
 
         genderChart = new Chart(genderPieChartCtx, {
             type: 'pie',
             data: {
-                labels: ['Male', 'Female', 'Other'],
+                labels: ['Male', 'Female'],
                 datasets: [{
                     label: 'Gender Distribution',
                     data: genderCounts,
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                    backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                    borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { display: true }
+                    legend: { display: true },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                const percentage = ((context.raw / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.raw} (${percentage}%)`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            const total = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${percentage}%\n${context.chart.data.labels[context.dataIndex]}`;
+                        },
+                        color: '#000',
+                        font: {
+                            size: 12
+                        }
+                    }
                 }
-            }
+            },
+            plugins: [ChartDataLabels]
         });
+    };
+
+    const checkEventsToday = () => {
+        const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+        const eventsToday = events.filter(event => event.date === today);
+
+        if (eventsToday.length > 0) {
+            const eventNames = eventsToday.map(event => `${event.name} at ${event.time}`).join(', ');
+            notificationMessage.textContent = `${eventNames}`;
+            notificationBox.style.display = 'block'; // Show notification box
+        } else {
+            notificationBox.style.display = 'none'; // Hide notification box if no events today
+        }
     };
 
     eventForm.addEventListener('submit', (e) => {
@@ -187,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
         renderEvents();
         updateEventDropdown();
         updateCharts();
+        checkEventsToday(); // Update the "Scheduled for Today" section after adding a new event
         eventForm.reset();
     });
 
@@ -215,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
             renderEvents();
             updateEventDropdown();
             updateCharts();
+            checkEventsToday(); // Recheck the "Scheduled for Today" after deletion
         }
     });
 
@@ -228,9 +259,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Initial Rendering
     renderEvents();
     renderParticipants();
     updateEventDropdown();
     updateCharts();
+    checkEventsToday(); // Check if there are events scheduled for today
 });
